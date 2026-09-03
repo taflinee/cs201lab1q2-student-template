@@ -36,9 +36,6 @@ public class SinglyLinkedList<E> {
         if (isEmpty()){
             tail = head;
         }
-        else{
-            head.getNext().setPrev(head);
-        }
         size++;
     }
 
@@ -48,7 +45,6 @@ public class SinglyLinkedList<E> {
             head = newest;
         } else {
             tail.setNext(newest);
-            newest.setPrev(tail);
         }
         tail = newest;
         size++;
@@ -67,9 +63,7 @@ public class SinglyLinkedList<E> {
         if (isEmpty()){
             tail = null;
         }
-        else{
-            head.setPrev(null);
-        }
+       
         return answer;
     }
 
@@ -89,27 +83,36 @@ public class SinglyLinkedList<E> {
             return null;
         }
         E last = tail.getElement();
-        if (tail == head){
+        if(head == tail){
             head = null;
             tail = null;
+            size--;
+            return last;
         }
-        else{
-            tail = tail.getPrev();
-            tail.setNext(null);
+        Node<E> n = head;
+        Node<E> prev = null;
+        while (n.getNext() != null){
+            prev = n;
+            n = n.getNext();
         }
+        if (prev != null){
+            prev.setNext(null);
+        }
+        tail = prev;
         size--;
         return last;
     }
 
     public void reverse(){    
-        Node<E> temp = tail;   
+        Node<E> prev = null;   
+        Node<E> curr = head;
         tail = head;
-        head = temp;
-        while (temp != null){
-            Node<E> nextNode = temp.getNext();
-            temp.setNext(temp.getPrev());
-            temp.setPrev(nextNode);
-            temp = temp.getNext();
+        while (curr != null){
+            Node<E> next = curr.getNext();
+            curr.setNext(prev);
+            prev = curr;
+            curr = next;
         }
+        head = prev;
     }
 }
