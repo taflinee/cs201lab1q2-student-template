@@ -36,6 +36,9 @@ public class SinglyLinkedList<E> {
         if (isEmpty()){
             tail = head;
         }
+        else{
+            head.getNext().setPrev(head);
+        }
         size++;
     }
 
@@ -45,6 +48,7 @@ public class SinglyLinkedList<E> {
             head = newest;
         } else {
             tail.setNext(newest);
+            newest.setPrev(tail);
         }
         tail = newest;
         size++;
@@ -57,6 +61,7 @@ public class SinglyLinkedList<E> {
 
         E answer = head.getElement();
         head = head.getNext();
+        head.setPrev(null);
         size--;
 
         if (isEmpty()){
@@ -67,14 +72,32 @@ public class SinglyLinkedList<E> {
 
     // Write your codes below
     public String toString(){
-     
+        StringBuilder s = new StringBuilder();
+        Node<E> curr = head;
+        for (int i = 0; i < size; i++){
+            s.append(curr.getElement());
+            curr = curr.getNext();
+        }
+        return s.toString();
     }
 
     public E removeLast(){
-      
+        Node<E> curr = head;
+        while (curr.getNext() != null){
+            curr = curr.getNext();
+        }
+        return curr.getElement();
     }
 
-    public void reverse(){       
-                 
+    public void reverse(){    
+        Node<E> temp = tail;   
+        tail = head;
+        head = tail;
+        while (temp != null){
+            Node<E> nextNode = temp.getNext();
+            temp.setNext(temp.getPrev());
+            temp.setPrev(nextNode);
+            temp = temp.getNext();
+        }
     }
 }
